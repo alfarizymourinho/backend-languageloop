@@ -1,5 +1,9 @@
-const db = require("../database/models");
+const db = require("../models");
+ // Menggunakan model dari Sequelize
+
+// Mendapatkan model Materi dari Sequelize
 const Materi = db.Materi;
+
 const multer = require("multer");
 
 // Konfigurasi multer untuk menyimpan file di direktori tertentu
@@ -36,32 +40,38 @@ exports.createMateri = (req, res) => {
         file: req.file.path // Menggunakan path file yang diunggah
     };
 
-    Materi.create(newData).then((data) => {
-        res.json({
-            message: "Materi successfully created.",
-            data: data,
+    // Menyimpan data materi ke dalam database menggunakan model Materi
+    Materi.create(newData)
+        .then((data) => {
+            res.json({
+                message: "Materi successfully created.",
+                data: data,
+            });
+        })
+        .catch((err) => {
+            res.status(500).json({
+                message: err.message || "Error creating materi.",
+                data: null,
+            });
         });
-    }).catch((err) => {
-        res.status(500).json({
-            message: err.message || "Error creating materi.",
-            data: null,
-        });
-    });
 };
 
 // READ
 exports.getAllMateri = (req, res) => {
-    Materi.findAll().then((data) => {
-        res.json({
-            message: "Materi retrieved successfully.",
-            data: data,
+    // Mengambil semua data materi dari database menggunakan model Materi
+    Materi.findAll()
+        .then((data) => {
+            res.json({
+                message: "Materi retrieved successfully.",
+                data: data,
+            });
+        })
+        .catch((err) => {
+            res.status(500).json({
+                message: err.message || "Error retrieving materi.",
+                data: null,
+            });
         });
-    }).catch((err) => {
-        res.status(500).json({
-            message: err.message || "Error retrieving materi.",
-            data: null,
-        });
-    });
 };
 
 // UPDATE
@@ -84,66 +94,75 @@ exports.updateMateri = (req, res) => {
         file: req.file.path // Menggunakan path file yang diunggah
     };
 
+    // Mengupdate data materi dalam database menggunakan model Materi
     Materi.update(updatedData, {
         where: { id },
-    }).then((num) => {
-        if (num == 1) {
-            res.json({
-                message: "Materi updated successfully.",
-                data: updatedData,
+    })
+        .then((num) => {
+            if (num == 1) {
+                res.json({
+                    message: "Materi updated successfully.",
+                    data: updatedData,
+                });
+            } else {
+                res.json({
+                    message: `Cannot update materi with id=${id}. Maybe materi was not found or req.body is empty!`,
+                    data: updatedData,
+                });
+            }
+        })
+        .catch((err) => {
+            res.status(500).json({
+                message: err.message || "Error updating materi.",
+                data: null,
             });
-        } else {
-            res.json({
-                message: `Cannot update materi with id=${id}. Maybe materi was not found or req.body is empty!`,
-                data: updatedData,
-            });
-        }
-    }).catch((err) => {
-        res.status(500).json({
-            message: err.message || "Error updating materi.",
-            data: null,
         });
-    });
 };
 
 // DELETE
 exports.deleteMateri = (req, res) => {
     const id = req.params.id;
+    // Menghapus data materi dari database menggunakan model Materi
     Materi.destroy({
         where: { id },
-    }).then((num) => {
-        if (num == 1) {
-            res.json({
-                message: "Materi deleted successfully.",
-                data: req.body,
+    })
+        .then((num) => {
+            if (num == 1) {
+                res.json({
+                    message: "Materi deleted successfully.",
+                    data: req.body,
+                });
+            } else {
+                res.json({
+                    message: `Cannot delete materi with id=${id}. Maybe materi was not found!`,
+                    data: req.body,
+                });
+            }
+        })
+        .catch((err) => {
+            res.status(500).json({
+                message: err.message || "Error deleting materi.",
+                data: null,
             });
-        } else {
-            res.json({
-                message: `Cannot delete materi with id=${id}. Maybe materi was not found!`,
-                data: req.body,
-            });
-        }
-    }).catch((err) => {
-        res.status(500).json({
-            message: err.message || "Error deleting materi.",
-            data: null,
         });
-    });
 };
 
 // BONUS - FIND ONE
 exports.getOneMateri = (req, res) => {
-    Materi.findByPk(req.params.id).then((data) => {
-        res.json({
-            message: "Materi retrieved successfully.",
-            data: data,
+    // Mendapatkan satu data materi berdasarkan ID dari database menggunakan model Materi
+    Materi.findByPk(req.params.id)
+        .then((data) => {
+            res.json({
+                message: "Materi retrieved successfully.",
+                data: data,
+            });
+        })
+        .catch((err) => {
+            res.status(500).json({
+                message: err.message || "Error retrieving materi.",
+                data: null,
+            });
         });
-    }).catch((err) => {
-        res.status(500).json({
-            message: err.message || "Error retrieving materi.",
-            data: null,
-        });
-    });
 };
 
 // Middleware untuk menangani pengunggahan file

@@ -1,18 +1,20 @@
 const { Quiz } = require("../database/models"); // Menggunakan object destructuring untuk langsung mengambil model Quiz dari database
 const bcrypt = require("bcryptjs");
 
-// Fungsi untuk mengirim jawaban pengguna dan memvalidasi
 exports.submitAnswer = (req, res) => {
     const { questionId, selectedAnswer } = req.body;
-    console.log("Request Body:", req.body); // Log request body to see if questionId and selectedAnswer are correct
 
-    // Temukan pertanyaan berdasarkan ID
+    if (!questionId || !selectedAnswer) {
+        return res.status(400).json({
+            message: "Invalid request. Please provide both questionId and selectedAnswer.",
+            data: null
+        });
+    }
+
     Quiz.findByPk(questionId)
         .then((question) => {
-            console.log("Question from Database:", question); // Log the retrieved question from the database
-
             if (!question) {
-                console.log("Pertanyaan tidak ditemukan."); // Log if question is not found
+                console.log("Pertanyaan tidak ditemukan.");
                 return res.status(404).json({
                     message: "Pertanyaan tidak ditemukan.",
                     data: null
@@ -38,16 +40,17 @@ exports.submitAnswer = (req, res) => {
                     correctAnswer = "";
             }
 
-            console.log("Jawaban yang Benar:", correctAnswer); // Log the correct answer
+            console.log("Selected Answer:", selectedAnswer);
+            console.log("Correct Answer:", correctAnswer);
+            console.log("Question ID:", questionId);
+            console.log("Question opsibenar:", question.opsibenar);
 
             if (correctAnswer === question.opsibenar) {
-                // Jawaban benar
                 return res.json({
                     message: "Jawaban Anda benar!",
                     data: question
                 });
             } else {
-                // Jawaban salah
                 return res.json({
                     message: "Jawaban Anda salah. Coba lagi!",
                     data: null
@@ -55,14 +58,15 @@ exports.submitAnswer = (req, res) => {
             }
         })
         .catch((err) => {
-            // Tangani kesalahan
-            console.log("Error:", err); // Log any errors that occur
+            console.log("Error:", err);
             return res.status(500).json({
                 message: err.message || "Terjadi kesalahan saat memproses jawaban.",
                 data: null
             });
         });
 };
+
+
 
 
 // CREATE: untuk menambahkan data ke dalam tabel quiz

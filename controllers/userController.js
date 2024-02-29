@@ -5,7 +5,7 @@ const bcrypt = require("bcryptjs");
 // CREATE: untuk enambahkan data kedalam tabel user
 exports.create = (req, res) => {
     const user = {
-        name: req.body.name,email: req.body.email,password: bcrypt.hashSync(req.body.password),role: req.body.role ? req.body.role : false,
+        name: req.body.name, email: req.body.email, password: bcrypt.hashSync(req.body.password), role: req.body.role ? req.body.role : false,
     };
 
     // proses menyimpan kedalam database

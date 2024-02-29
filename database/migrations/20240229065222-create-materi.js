@@ -19,10 +19,10 @@ module.exports = {
         type: Sequelize.STRING
       },
       isi: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
-      file: {
-        type: Sequelize.STRING
+      materi: {
+        type: Sequelize.BLOB
       },
       createdAt: {
         allowNull: false,

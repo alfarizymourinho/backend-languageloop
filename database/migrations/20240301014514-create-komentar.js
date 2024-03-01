@@ -15,11 +15,8 @@ module.exports = {
       email: {
         type: Sequelize.STRING
       },
-      subjek: {
-        type: Sequelize.STRING
-      },
-      pesan: {
-        type: Sequelize.STRING
+      isi: {
+        type: Sequelize.TEXT
       },
       createdAt: {
         allowNull: false,

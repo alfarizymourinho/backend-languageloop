@@ -4,6 +4,9 @@ const user = require('./userRoute')
 const quiz = require('./quizRoute')
 const materi = require('./materiRoute')
 const komentar = require('./komentarRoute')
+const balasan = require('./balasanRoute')
+
+
 const router = express.Router()
 
 router.get(`/api/v1/`, (_req, res) => {
@@ -17,5 +20,7 @@ router.use(user)
 router.use(quiz)
 router.use(materi)
 router.use(komentar)
+router.use(balasan)
+
 
 module.exports = router;

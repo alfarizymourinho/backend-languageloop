@@ -1,17 +1,15 @@
 const db = require("../database/models");
 const Komentar = db.Komentar;
 const bcrypt = require("bcryptjs");
-const komentar = require("../database/models/komentar");
 
 // CREATE: Menambahkan komentar baru
 exports.create = (req, res) => {
-    const { name, email, subjek, pesan } = req.body;
+    const { name, email, isi } = req.body;
 
     const komentarData = {
         name: name,
         email: email,
-        subjek: subjek,
-        pesan: pesan
+        isi: isi
     };
 
     Komentar.create(komentarData)
@@ -49,13 +47,12 @@ exports.findAll = (req, res) => {
 // UPDATE: Mengubah komentar berdasarkan ID
 exports.update = (req, res) => {
     const id = req.params.id;
-    const { name, email, subjek, pesan } = req.body;
+    const { name, email, isi } = req.body;
 
     const updatedKomentarData = {
         name: name,
         email: email,
-        subjek: subjek,
-        pesan: pesan
+        isi: isi
     };
 
     Komentar.update(updatedKomentarData, { where: { id } })
@@ -89,7 +86,7 @@ exports.delete = (req, res) => {
             if (num == 1) {
                 res.json({
                     message: "Komentar berhasil dihapus.",
-                    data: komentar,
+                    data: null, // Menghapus komentar, sehingga data tidak perlu direspon
                 });
             } else {
                 res.json({
